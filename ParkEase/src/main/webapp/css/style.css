@@ -1,0 +1,525 @@
+@charset "UTF-8";
+/* =====================================================
+   ParkEase – Shared Stylesheet
+   Used by: Login.jsp, Register.jsp,
+            AdminDashboard.jsp, DriverDashboard.jsp
+   ===================================================== */
+
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Design tokens ── */
+:root {
+  /* Core palette (auth pages & admin) */
+  --ink:    #080b12;
+  --card:   rgba(13,17,28,0.92);
+  --border: rgba(255,255,255,0.08);
+  --gold:   #e8b84b;
+  --gold2:  #f5d07a;
+  --teal:   #2dd4bf;
+  --danger: #f87171;
+  --muted:  rgba(255,255,255,0.38);
+  --text:   rgba(255,255,255,0.92);
+
+  /* Admin dashboard extras */
+  --bg:      #0d1117;
+  --surface: #161b27;
+  --surface2:#1e2535;
+  --border2: rgba(255,255,255,0.12);
+  --red:     #f87171;
+  --purple:  #a78bfa;
+  --radius:  14px;
+
+  /* Driver dashboard extras (light theme) */
+  --driver-bg:      #f0f3fa;
+  --driver-surface: #fff;
+  --driver-border:  #e2e8f5;
+  --driver-sidebar: #0d1117;
+  --accent:  #2563eb;
+  --green:   #10b981;
+  --amber:   #f59e0b;
+  --driver-text:  #111827;
+  --driver-muted: #6b7280;
+  --driver-radius:16px;
+}
+
+/* =====================================================
+   AUTH PAGES (Login & Register)
+   ===================================================== */
+
+/* ── Background effects ── */
+.bg-canvas { position: fixed; inset: 0; z-index: 0; }
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px); opacity: 0.3;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+/* Login orbs */
+.login-page .orb-1 { width: 520px; height: 520px; background: #162a45; top: -120px; left: -120px; }
+.login-page .orb-2 { width: 420px; height: 420px; background: #2a1545; bottom: -100px; right: -100px; animation-delay: -5s; }
+.login-page .orb-3 { width: 280px; height: 280px; background: #0f3328; top: 45%; left: 45%; animation-delay: -9s; }
+
+/* Register orbs */
+.register-page .orb-1 { width: 500px; height: 500px; background: #1a2e45; top: -120px; right: -100px; }
+.register-page .orb-2 { width: 380px; height: 380px; background: #251545; bottom: -90px; left: -90px; animation-delay: -6s; }
+.register-page .orb-3 { width: 260px; height: 260px; background: #0f3328; top: 40%; right: 30%; animation-delay: -10s; }
+
+@keyframes drift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(50px,35px) scale(1.1); }
+}
+
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* ── Auth body ── */
+.auth-body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--ink);
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; position: relative;
+}
+
+/* ── Auth layout card ── */
+.layout {
+  position: relative; z-index: 1;
+  display: flex; width: 100%;
+  border-radius: 24px; overflow: hidden;
+  box-shadow: 0 48px 140px rgba(0,0,0,0.75), 0 0 0 1px var(--border);
+  animation: rise 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+.layout.login-layout   { max-width: 940px; min-height: 560px; }
+.layout.register-layout{ max-width: 980px; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Brand panel ── */
+.brand-panel {
+  padding: 50px 44px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-right: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.login-layout .brand-panel {
+  width: 42%;
+  background: linear-gradient(145deg, #0d1e30 0%, #0c1e17 55%, #111020 100%);
+}
+.register-layout .brand-panel {
+  width: 38%; padding: 50px 40px;
+  background: linear-gradient(160deg, #0c1e17 0%, #0d1e30 60%, #110f22 100%);
+}
+.brand-panel::before {
+  content: ''; position: absolute; top: -70px; right: -70px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,184,75,0.18), transparent 70%);
+}
+.login-layout .brand-panel::after {
+  content: ''; position: absolute; bottom: -40px; left: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.1), transparent 70%);
+}
+.register-layout .brand-panel::before {
+  background: radial-gradient(circle, rgba(45,212,191,0.15), transparent 70%);
+  top: auto; bottom: -60px; right: -60px; width: 240px; height: 240px;
+}
+
+/* ── Logo ── */
+.logo {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 1.5rem; font-weight: 700; color: var(--gold);
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.logo-p {
+  width: 38px; height: 38px; background: var(--gold); border-radius: 10px;
+  display: grid; place-items: center; color: #000;
+  font-size: 1.1rem; font-weight: 800; flex-shrink: 0;
+}
+
+/* ── Brand body ── */
+.brand-body {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  padding: 32px 0; position: relative; z-index: 1;
+}
+.brand-headline {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 2.3rem; font-weight: 700; color: var(--text);
+  line-height: 1.15; margin-bottom: 14px;
+}
+.register-layout .brand-headline { font-size: 2.1rem; }
+.brand-headline em { color: var(--gold); font-style: normal; }
+.register-layout .brand-headline em { color: var(--teal); }
+.brand-sub { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+.register-layout .brand-sub { font-size: 0.86rem; }
+
+/* Login feature list */
+.feature-list { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+.feature-item { display: flex; align-items: center; gap: 12px; font-size: 0.83rem; color: var(--muted); }
+.feature-dot {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(232,184,75,0.08); border: 1px solid rgba(232,184,75,0.18);
+  display: grid; place-items: center; font-size: 0.78rem; flex-shrink: 0;
+}
+
+/* Register step list */
+.step-list { margin-top: 32px; display: flex; flex-direction: column; gap: 18px; }
+.step-item { display: flex; align-items: flex-start; gap: 14px; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(45,212,191,0.4);
+  display: grid; place-items: center;
+  font-size: 0.75rem; font-weight: 700; color: var(--teal);
+  flex-shrink: 0; margin-top: 2px;
+}
+.step-text { font-size: 0.83rem; color: var(--muted); line-height: 1.5; }
+.step-text strong { color: var(--text); font-weight: 500; display: block; margin-bottom: 2px; }
+
+.brand-footer { font-size: 0.72rem; color: rgba(255,255,255,0.18); position: relative; z-index: 1; }
+
+/* ── Form panel ── */
+.form-panel {
+  flex: 1; background: var(--card); backdrop-filter: blur(28px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.login-layout   .form-panel { padding: 52px 48px; }
+.register-layout.form-panel { padding: 48px 48px; }
+.form-panel { padding: 52px 48px; }
+
+.form-eyebrow {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+}
+.register-layout .form-eyebrow { color: var(--teal); }
+.form-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 2rem; font-weight: 700; color: var(--text);
+  line-height: 1.1; margin-bottom: 6px;
+}
+.register-layout .form-title { font-size: 1.9rem; }
+.form-sub { font-size: 0.86rem; color: var(--muted); margin-bottom: 34px; }
+.register-layout .form-sub { margin-bottom: 30px; }
+
+/* ── Alerts ── */
+.alert {
+  padding: 12px 16px; border-radius: 10px; font-size: 0.84rem;
+  margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+  animation: slideIn 0.3s ease;
+}
+.register-layout .alert { margin-bottom: 18px; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+.alert-error   { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); color: var(--danger); }
+.alert-success { background: rgba(45,212,191,0.1);  border: 1px solid rgba(45,212,191,0.25);  color: var(--teal); }
+
+/* ── Form fields ── */
+.field { margin-bottom: 20px; }
+.field label {
+  display: block; font-size: 0.74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--muted); margin-bottom: 8px;
+}
+.field input {
+  width: 100%; padding: 13px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.09);
+  border-radius: 12px; color: var(--text);
+  font-family: 'Cabinet Grotesk', sans-serif; font-size: 0.95rem;
+  outline: none; transition: all 0.2s;
+}
+.register-layout .field input { padding: 12px 16px; font-size: 0.93rem; }
+.field input::placeholder { color: rgba(255,255,255,0.18); }
+.field input:focus {
+  border-color: var(--gold);
+  background: rgba(232,184,75,0.05);
+  box-shadow: 0 0 0 3px rgba(232,184,75,0.12);
+}
+.field input.error { border-color: var(--danger); }
+.field label { font-size: 0.73rem; }
+
+/* ── Register grid ── */
+.fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field.full  { grid-column: 1 / -1; }
+.field       { margin-bottom: 0; }
+
+/* ── Password strength ── */
+.strength-bar  { display: flex; gap: 4px; margin-top: 8px; }
+.strength-seg  { height: 3px; flex: 1; border-radius: 3px; background: rgba(255,255,255,0.1); transition: background 0.3s; }
+.strength-label{ font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+
+/* ── Submit button ── */
+.btn-submit {
+  width: 100%; padding: 14px;
+  background: var(--gold); color: #080b12;
+  border: none; border-radius: 12px;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+  margin-top: 8px; letter-spacing: 0.5px;
+}
+.register-layout .btn-submit { margin-top: 20px; }
+.btn-submit:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(232,184,75,0.38); }
+.btn-submit:active { transform: translateY(0); }
+
+/* ── Switch link ── */
+.switch-link { text-align: center; margin-top: 24px; font-size: 0.85rem; color: var(--muted); }
+.register-layout .switch-link { margin-top: 20px; font-size: 0.84rem; }
+.switch-link a { color: var(--gold); text-decoration: none; font-weight: 600; }
+.switch-link a:hover { color: var(--gold2); }
+
+
+/* =====================================================
+   ADMIN DASHBOARD
+   ===================================================== */
+
+.admin-body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex;
+}
+
+/* ── Sidebar (admin) ── */
+.admin-body .sidebar {
+  width: 252px; min-height: 100vh; background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: 28px 0;
+  position: fixed; top: 0; left: 0; bottom: 0;
+}
+.admin-body .logo { font-family: 'Clash Display', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--gold); padding: 0 24px 36px; display: flex; align-items: center; gap: 10px; }
+.admin-body .logo-p { width: 36px; height: 36px; background: var(--gold); border-radius: 9px; display: grid; place-items: center; color: #000; font-size: 1rem; font-weight: 800; }
+.nav-gl { font-size: 0.62rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); padding: 0 24px 8px; margin-top: 8px; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 24px; color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; border-left: 3px solid transparent; transition: all 0.2s; cursor: pointer; margin: 1px 0; }
+.nav-item:hover, .nav-item.active { color: var(--text); background: rgba(232,184,75,0.07); border-left-color: var(--gold); }
+.nav-item .ni { font-size: 1rem; width: 20px; text-align: center; }
+.sb-sp { flex: 1; }
+.sb-foot { padding: 20px 24px; border-top: 1px solid var(--border); }
+.ub { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--gold); display: grid; place-items: center; font-family: 'Clash Display', sans-serif; font-weight: 700; color: #000; font-size: 0.95rem; flex-shrink: 0; }
+.u-name { font-weight: 600; color: var(--text); font-size: 0.86rem; line-height: 1.25; }
+.u-role { font-size: 0.7rem; color: var(--muted); }
+.logout-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 14px 0 0; padding: 10px; background: rgba(255,255,255,0.04); border: 1px solid var(--border2); border-radius: 10px; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+.logout-btn:hover { background: rgba(248,113,113,0.12); border-color: rgba(248,113,113,0.35); color: var(--red); }
+
+/* ── Main area (admin) ── */
+.admin-body .main { margin-left: 252px; flex: 1; padding: 36px 40px; min-height: 100vh; }
+.page-header { margin-bottom: 32px; }
+.page-title { font-family: 'Clash Display', sans-serif; font-size: 1.9rem; font-weight: 700; color: var(--text); line-height: 1; }
+.page-title span { color: var(--gold); }
+.page-sub { color: var(--muted); margin-top: 6px; font-size: 0.9rem; }
+
+/* ── Stat cards (admin) ── */
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-bottom: 28px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 22px 20px; position: relative; overflow: hidden; transition: transform 0.2s; }
+.stat-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.stat-card.gold::after   { background: var(--gold); }
+.stat-card.teal::after   { background: var(--teal); }
+.stat-card.red::after    { background: var(--red); }
+.stat-card.purple::after { background: var(--purple); }
+.stat-card:hover { transform: translateY(-3px); }
+.stat-icon  { font-size: 1.6rem; margin-bottom: 12px; }
+.stat-value { font-family: 'Clash Display', sans-serif; font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 0.78rem; color: var(--muted); }
+
+/* ── Cards (admin) ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 22px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border); }
+.card-title  { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 0.95rem; }
+.card-badge  { font-size: 0.74rem; color: var(--gold); border: 1px solid rgba(232,184,75,0.35); padding: 3px 12px; border-radius: 20px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.card-badge:hover { background: var(--gold); color: #000; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px; }
+
+/* ── Tables (admin) ── */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 12px 22px; border-bottom: 1px solid var(--border); }
+td { padding: 13px 22px; font-size: 0.86rem; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.025); }
+
+/* ── Badges (admin) ── */
+.badge { display: inline-block; padding: 3px 11px; border-radius: 20px; font-size: 0.69rem; font-weight: 700; }
+.badge-active    { background: rgba(45,212,191,0.12);  color: var(--teal); }
+.badge-locked    { background: rgba(248,113,113,0.12); color: var(--red); }
+.badge-driver    { background: rgba(167,139,250,0.12); color: var(--purple); }
+.badge-admin     { background: rgba(232,184,75,0.12);  color: var(--gold); }
+.badge-free      { background: rgba(45,212,191,0.12);  color: var(--teal); }
+.badge-booked    { background: rgba(248,113,113,0.12); color: var(--red); }
+.badge-completed { background: rgba(232,184,75,0.12);  color: var(--gold); }
+.badge-cancelled { background: rgba(167,139,250,0.12); color: var(--purple); }
+
+/* ── Action buttons (admin) ── */
+.action-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+.btn-sm { padding: 5px 13px; border-radius: 7px; font-size: 0.74rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; font-family: 'Cabinet Grotesk', sans-serif; }
+.btn-unlock { background: rgba(45,212,191,0.12); color: var(--teal); }
+.btn-unlock:hover { background: var(--teal); color: #000; }
+.btn-lock   { background: rgba(248,113,113,0.12); color: var(--red); }
+.btn-lock:hover { background: var(--red); color: #fff; }
+.btn-delete { background: rgba(248,113,113,0.08); color: var(--red); }
+.btn-delete:hover { background: var(--red); color: #fff; }
+.btn-edit   { background: rgba(232,184,75,0.1); color: var(--gold); }
+.btn-edit:hover { background: var(--gold); color: #000; }
+
+/* ── Slot map (admin) ── */
+.slot-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(70px,1fr)); gap: 9px; padding: 20px; }
+.slot { aspect-ratio: 1; border-radius: 10px; display: grid; place-items: center; font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; }
+.slot.free   { background: rgba(45,212,191,0.1);  color: var(--teal); border-color: rgba(45,212,191,0.25); }
+.slot.booked { background: rgba(248,113,113,0.1); color: var(--red);  border-color: rgba(248,113,113,0.25); }
+.slot:hover  { transform: scale(1.07); }
+
+/* ── Revenue (admin) ── */
+.rev-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 22px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.86rem; }
+.rev-row:last-child { border-bottom: none; }
+.rev-label { color: var(--muted); }
+.rev-value { font-family: 'Clash Display', sans-serif; font-weight: 600; color: var(--text); }
+.rev-bar-wrap { padding: 6px 22px 18px; }
+.rev-bar-row  { margin-bottom: 14px; }
+.rev-bar-top  { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--muted); margin-bottom: 6px; }
+.rev-bar      { height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+.rev-bar-fill { height: 100%; border-radius: 4px; background: var(--gold); transition: width 1.2s ease; }
+
+/* ── Search toolbar (admin) ── */
+.table-toolbar { display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-bottom: 1px solid var(--border); }
+.search-input { flex: 1; padding: 9px 14px; background: var(--surface2); border: 1.5px solid var(--border2); border-radius: 9px; color: var(--text); font-family: 'Cabinet Grotesk', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--gold); }
+
+/* ── Empty states ── */
+.empty { text-align: center; padding: 44px 22px; color: var(--muted); font-size: 0.87rem; }
+.empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+
+/* =====================================================
+   DRIVER DASHBOARD
+   ===================================================== */
+
+.driver-body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--driver-bg); color: var(--driver-text);
+  min-height: 100vh; display: flex;
+}
+
+/* ── Sidebar (driver) ── */
+.driver-body .sidebar {
+  width: 256px; min-height: 100vh; background: var(--driver-sidebar);
+  display: flex; flex-direction: column; padding: 28px 0;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+}
+.driver-body .logo { font-family: 'Clash Display', sans-serif; font-size: 1.45rem; font-weight: 700; color: var(--gold); padding: 0 24px 36px; display: flex; align-items: center; gap: 10px; }
+.driver-body .logo-p { width: 36px; height: 36px; background: var(--gold); border-radius: 9px; display: grid; place-items: center; color: #000; font-size: 1rem; font-weight: 800; }
+.driver-body .nav-gl { color: rgba(255,255,255,0.25); }
+.driver-body .nav-item { color: rgba(255,255,255,0.5); }
+.driver-body .nav-item:hover,
+.driver-body .nav-item.active { color: #fff; background: rgba(255,255,255,0.07); border-left-color: var(--gold); }
+.driver-body .u-name  { font-weight: 600; color: #fff; font-size: 0.86rem; line-height: 1.25; }
+.u-email { font-size: 0.7rem; color: rgba(255,255,255,0.35); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+.driver-body .logout-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); }
+.driver-body .logout-btn:hover { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+
+/* ── Main area (driver) ── */
+.driver-body .main { margin-left: 256px; flex: 1; padding: 36px 40px; min-height: 100vh; }
+.driver-body .page-title span { color: var(--accent); }
+
+/* ── Stat cards (driver) ── */
+.driver-body .stats-grid { grid-template-columns: repeat(3,1fr); }
+.driver-body .stat-card {
+  background: var(--driver-surface); border: 1px solid var(--driver-border);
+  border-radius: var(--driver-radius);
+  padding: 22px 24px; display: flex; align-items: center; gap: 18px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.driver-body .stat-card::after { display: none; }
+.driver-body .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.stat-card.blue::before  { background: var(--accent); }
+.stat-card.green::before { background: var(--green); }
+.stat-card.amber::before { background: var(--amber); }
+.stat-icon { width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; font-size: 1.4rem; flex-shrink: 0; }
+.si-b { background: rgba(37,99,235,0.1); }
+.si-g { background: rgba(16,185,129,0.1); }
+.si-a { background: rgba(245,158,11,0.1); }
+
+/* ── Cards (driver) ── */
+.driver-body .card { background: var(--driver-surface); border: 1px solid var(--driver-border); border-radius: var(--driver-radius); box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+.driver-body .card-header { padding: 20px 24px; }
+.driver-body .card-title  { font-size: 1rem; }
+.driver-body .card-badge  { color: var(--accent); border-color: var(--accent); }
+.driver-body .card-badge:hover { background: var(--accent); color: #fff; }
+
+/* ── Slot map (driver) ── */
+.driver-body .slot-grid { grid-template-columns: repeat(auto-fill,minmax(76px,1fr)); gap: 10px; padding: 22px; }
+.driver-body .slot { border-radius: 12px; flex-direction: column; border-width: 2px; gap: 5px; }
+.driver-body .slot .si { font-size: 1rem; }
+.driver-body .slot.free   { background: rgba(16,185,129,0.08); color: var(--green); border-color: rgba(16,185,129,0.25); }
+.driver-body .slot.booked { background: rgba(239,68,68,0.06);  color: var(--danger); border-color: rgba(239,68,68,0.18); cursor: not-allowed; opacity: 0.65; }
+.driver-body .slot.free:hover { background: var(--green); color: #fff; transform: scale(1.07); border-color: var(--green); }
+.driver-body .slot.selected   { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.07); }
+.slot-legend { display: flex; gap: 18px; padding: 0 22px 18px; font-size: 0.78rem; color: var(--driver-muted); }
+.slot-legend span { display: flex; align-items: center; gap: 6px; }
+.dot   { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.dot-g { background: var(--green); }
+.dot-r { background: var(--danger); }
+.dot-b { background: var(--accent); }
+
+/* ── Booking form (driver) ── */
+.book-form { padding: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.fg label { display: block; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--driver-muted); margin-bottom: 7px; }
+.fg input, .fg select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--driver-border); border-radius: 11px; font-family: 'Cabinet Grotesk', sans-serif; font-size: 0.9rem; color: var(--driver-text); background: var(--driver-bg); outline: none; transition: border-color 0.2s; }
+.fg input:focus, .fg select:focus { border-color: var(--accent); }
+.book-actions { padding: 0 24px 24px; display: flex; gap: 14px; align-items: center; }
+.btn-primary { padding: 11px 28px; background: var(--accent); color: #fff; border: none; border-radius: 11px; font-family: 'Clash Display', sans-serif; font-size: 0.92rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.35); }
+.btn-hint { font-size: 0.8rem; color: var(--driver-muted); }
+
+/* ── Toast (driver) ── */
+.toast { display: none; margin: 0 24px 14px; padding: 12px 16px; border-radius: 11px; font-size: 0.86rem; font-weight: 500; }
+.toast.success { background: rgba(16,185,129,0.1);  border: 1px solid rgba(16,185,129,0.28); color: var(--green); }
+.toast.error   { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.22); color: var(--danger); }
+
+/* ── Pricing (driver) ── */
+.pricing-grid { padding: 22px; display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.price-card { background: var(--driver-bg); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--driver-border); }
+.price-icon { font-size: 1.6rem; margin-bottom: 8px; }
+.price-val  { font-family: 'Clash Display', sans-serif; font-size: 1.2rem; font-weight: 700; }
+.price-lbl  { font-size: 0.75rem; color: var(--driver-muted); margin-top: 3px; }
+
+/* ── Tables (driver) ── */
+.driver-body table { width: 100%; border-collapse: collapse; }
+.driver-body th { font-size: 0.7rem; letter-spacing: 1.5px; color: var(--driver-muted); padding: 12px 24px; border-bottom: 1px solid var(--driver-border); background: var(--driver-bg); }
+.driver-body td { padding: 14px 24px; font-size: 0.87rem; border-bottom: 1px solid var(--driver-border); vertical-align: middle; }
+.driver-body tr:last-child td { border-bottom: none; }
+.driver-body tr:hover td { background: rgba(37,99,235,0.02); }
+.driver-body .badge { padding: 4px 12px; font-size: 0.7rem; }
+.driver-body .badge-active    { background: rgba(16,185,129,0.1);  color: var(--green); }
+.driver-body .badge-completed { background: rgba(37,99,235,0.09);  color: var(--accent); }
+.driver-body .badge-cancelled { background: rgba(239,68,68,0.09); color: var(--danger); }
+.cancel-btn { padding: 5px 14px; background: rgba(239,68,68,0.08); color: var(--danger); border: none; border-radius: 7px; font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.cancel-btn:hover { background: var(--danger); color: #fff; }
+
+/* ── Profile (driver) ── */
+.profile-wrap { padding: 32px; }
+.profile-top { display: flex; align-items: center; gap: 22px; margin-bottom: 30px; padding-bottom: 26px; border-bottom: 1px solid var(--driver-border); }
+.avatar-lg { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg,var(--accent),var(--green)); display: grid; place-items: center; font-family: 'Clash Display', sans-serif; font-size: 1.8rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+.p-name  { font-family: 'Clash Display', sans-serif; font-size: 1.3rem; font-weight: 700; }
+.p-email { color: var(--driver-muted); font-size: 0.86rem; margin-top: 3px; }
+.p-role  { display: inline-block; margin-top: 7px; padding: 3px 12px; background: rgba(37,99,235,0.09); color: var(--accent); border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.pf label { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--driver-muted); display: block; margin-bottom: 7px; }
+.pf input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--driver-border); border-radius: 11px; font-size: 0.9rem; color: var(--driver-text); background: var(--driver-bg); font-family: 'Cabinet Grotesk', sans-serif; outline: none; transition: border-color 0.2s; }
+.pf input:focus { border-color: var(--accent); }
+.profile-actions { margin-top: 22px; }
+
+/* ── Driver empty states ── */
+.driver-body .empty { padding: 52px 24px; color: var(--driver-muted); }
+.driver-body .empty-icon { font-size: 2.8rem; }
+.empty-text { font-size: 0.88rem; }
+.empty-text a { color: var(--accent); cursor: pointer; text-decoration: none; font-weight: 600; }

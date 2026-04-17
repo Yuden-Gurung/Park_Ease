@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+        
+    <wb-module deploy-name="ParkEase">
+                
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module archiveName="jakarta.servlet.jsp.jstl-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/lalit/Downloads/JavaJarFiles_69c49433-d65f-4742-a0d7-93cefeffea52_278170_/Java Jar Files/jar_files/jakarta.servlet.jsp.jstl-2.0.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-j-9.6.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/mysql-connector-j-9.6.0/mysql-connector-j-9.6.0/mysql-connector-j-9.6.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jakarta.servlet.jsp.jstl-api-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/lalit/Downloads/JavaJarFiles_69c49433-d65f-4742-a0d7-93cefeffea52_278170_/Java Jar Files/jar_files/jakarta.servlet.jsp.jstl-api-2.0.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jakarta.activation-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/lalit/Downloads/JavaJarFiles_69c49433-d65f-4742-a0d7-93cefeffea52_278170_/Java Jar Files/jar_files/jakarta.activation-2.0.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jakarta.servlet-api-5.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/lalit/Downloads/JavaJarFiles_69c49433-d65f-4742-a0d7-93cefeffea52_278170_/Java Jar Files/jar_files/jakarta.servlet-api-5.0.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jakarta.xml.bind-api-3.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/lalit/Downloads/JavaJarFiles_69c49433-d65f-4742-a0d7-93cefeffea52_278170_/Java Jar Files/jar_files/jakarta.xml.bind-api-3.0.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jakarta.el-api-4.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/lalit/Downloads/JavaJarFiles_69c49433-d65f-4742-a0d7-93cefeffea52_278170_/Java Jar Files/jar_files/jakarta.el-api-4.0.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                
+        <property name="context-root" value="ParkEase"/>
+                
+        <property name="java-output-path" value="/ParkEase/build/classes"/>
+            
+    </wb-module>
+    
+</project-modules>
