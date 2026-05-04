@@ -19,7 +19,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AdminDashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body class="admin-body">
@@ -50,6 +50,28 @@
       <div class="page-title">Admin <span>Dashboard</span></div>
       <div class="page-sub">Welcome back, <%= adminName %> — here's what's happening today.</div>
     </div>
+
+    <%-- Global feedback toast (shown after any AdminAction redirect) --%>
+    <c:choose>
+      <c:when test="${param.msg == 'locked'}">
+        <div class="toast error" style="display:block;margin-bottom:18px">🔒 User account has been locked.</div>
+      </c:when>
+      <c:when test="${param.msg == 'unlocked'}">
+        <div class="toast success" style="display:block;margin-bottom:18px">🔓 User account has been unlocked.</div>
+      </c:when>
+      <c:when test="${param.msg == 'deleted'}">
+        <div class="toast error" style="display:block;margin-bottom:18px">🗑️ User has been permanently deleted.</div>
+      </c:when>
+      <c:when test="${param.msg == 'released'}">
+        <div class="toast success" style="display:block;margin-bottom:18px">✅ Slot has been force-released.</div>
+      </c:when>
+      <c:when test="${param.msg == 'cancelled'}">
+        <div class="toast error" style="display:block;margin-bottom:18px">❌ Booking has been force-cancelled.</div>
+      </c:when>
+      <c:when test="${param.error == 'true'}">
+        <div class="toast error" style="display:block;margin-bottom:18px">⚠️ An error occurred. Please try again.</div>
+      </c:when>
+    </c:choose>
     <div class="stats-grid">
       <div class="stat-card gold">
         <div class="stat-icon">👥</div>
@@ -399,13 +421,14 @@
     a.addEventListener('click', function(e) { e.preventDefault(); });
   });
 
-  window.addEventListener('load', function() {
-    document.querySelectorAll('.rev-bar-fill').forEach(function(bar) {
-      var w = bar.style.width;
-      bar.style.width = '0';
-      setTimeout(function() { bar.style.width = w; }, 200);
-    });
-  });
+  // Auto-navigate to section from redirect (e.g. ?section=users after lock/delete)
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var sec = params.get('section');
+    if (sec && document.getElementById(sec)) {
+      show(sec);
+    }
+  })();
 </script>
 </body>
 </html>

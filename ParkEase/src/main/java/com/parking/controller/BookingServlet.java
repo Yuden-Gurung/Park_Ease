@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import com.parking.dao.BookingDAO;
 import com.parking.dao.SlotDAO;
 import com.parking.model.Booking;
@@ -47,6 +49,7 @@ public class BookingServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
 		HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/Login");
@@ -69,13 +72,14 @@ public class BookingServlet extends HttpServlet {
         }
  
         try {
-            LocalDateTime checkIn = LocalDateTime.parse(request.getParameter("checkIn")); 
+            LocalDateTime checkIn  = LocalDateTime.parse(request.getParameter("checkIn"));
             LocalDateTime checkOut = LocalDateTime.parse(request.getParameter("checkOut"));
- 
-            // FIX 1: checkIn must be in the future
-            if (!checkIn.isAfter(LocalDateTime.now())) {
-                forwardWithError(request, response, "Check-in time must be in the future.");
-                return;
+            LocalDateTime nowInNepal = LocalDateTime.now(ZoneId.of("Asia/Kathmandu"));
+
+         // Allow check-in within the current minute (buffer of 1 minute back)
+         if (checkIn.isBefore(nowInNepal.minusMinutes(1))) {
+             forwardWithError(request, response, "Check-in time must be in the future.");
+             return;
             }
  
             // FIX 2: checkOut must be after checkIn

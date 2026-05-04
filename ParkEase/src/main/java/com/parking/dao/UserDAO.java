@@ -133,6 +133,58 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Updates only the password for a user.
+     * Called by ResetPasswordServlet after verifying the current password.
+     */
+    public void updatePassword(int userId, String hashedPassword) throws SQLException {
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Permanently deletes a user and all their bookings (CASCADE).
+     * Assumes the DB has ON DELETE CASCADE on bookings.user_id,
+     * or deletes bookings first if not.
+     */
+    public void deleteUser(int userId) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = DBConfig.getConnection();
+            conn.setAutoCommit(false);
+
+            // Delete bookings first (in case DB doesn't have CASCADE)
+            String deleteBookings = "DELETE FROM bookings WHERE user_id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteBookings)) {
+                ps.setInt(1, userId);
+                ps.executeUpdate();
+            }
+
+            // Then delete the user
+            String deleteUser = "DELETE FROM users WHERE id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteUser)) {
+                ps.setInt(1, userId);
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ignore) {}
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                try { conn.close(); } catch (SQLException ignore) {}
+            }
+        }
+    }
+
     // ── Helper ──────────────────────────────────────────────────────────────
 
     private User mapRow(ResultSet rs) throws SQLException {

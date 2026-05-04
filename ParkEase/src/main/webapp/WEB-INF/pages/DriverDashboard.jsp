@@ -3,6 +3,7 @@
 <%@ page import="com.parking.model.User" %>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
     User user = (User) session.getAttribute("user");
     if (user == null || !"DRIVER".equals(user.getRole())) {
@@ -20,7 +21,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Driver Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body class="driver-body">
@@ -250,9 +251,11 @@
   <section id="profile" class="section-page" style="display:none">
     <div class="page-header">
       <div class="page-title">My <span>Profile</span></div>
-      <div class="page-sub">Manage your account information.</div>
+      <div class="page-sub">Manage your account information and security.</div>
     </div>
-    <div class="card">
+
+    <!-- Account Info Card (read-only) -->
+    <div class="card" style="margin-bottom:22px">
       <div class="profile-wrap">
         <div class="profile-top">
           <div class="avatar-lg"><%= initial %></div>
@@ -262,20 +265,50 @@
             <div class="p-role">Driver</div>
           </div>
         </div>
-        <c:if test="${not empty profileSuccess}">
-          <div class="toast success" style="display:block;margin:0 0 18px"><c:out value="${profileSuccess}"/></div>
-        </c:if>
-        <c:if test="${not empty profileError}">
-          <div class="toast error" style="display:block;margin:0 0 18px"><c:out value="${profileError}"/></div>
-        </c:if>
-        <form action="${pageContext.request.contextPath}/UpdateProfile" method="post" onsubmit="return validateProfile()">
-          <div class="profile-grid">
-            <div class="pf"><label>Full Name</label><input type="text" name="fullName" value="<%= driverName %>"></div>
-            <div class="pf"><label>Email</label><input type="email" name="email" value="<%= driverEmail %>"></div>
-            <div class="pf"><label>New Password</label><input type="password" id="np" name="newPassword" placeholder="Leave blank to keep current"></div>
-            <div class="pf"><label>Confirm Password</label><input type="password" id="cp" name="confirmPassword" placeholder="Repeat new password"></div>
+      </div>
+    </div>
+
+    <!-- Change Password Card -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🔒 Change Password</div></div>
+      <div class="profile-wrap">
+
+        <%-- Success banner (redirect param) --%>
+        <c:if test="${param.passwordChanged == 'true'}">
+          <div class="toast success" style="display:block;margin:0 0 18px">
+            ✅ Password changed successfully!
           </div>
-          <div class="profile-actions"><button type="submit" class="btn-primary">Save Changes</button></div>
+        </c:if>
+
+        <%-- Error from servlet forward --%>
+        <c:if test="${not empty passwordError}">
+          <div class="toast error" style="display:block;margin:0 0 18px">
+            <c:out value="${passwordError}"/>
+          </div>
+        </c:if>
+
+        <form action="${pageContext.request.contextPath}/ResetPassword" method="post"
+              onsubmit="return validateResetPassword()">
+          <div class="profile-grid">
+            <div class="pf">
+              <label>Current Password</label>
+              <input type="password" id="cur-pw" name="currentPassword"
+                     placeholder="Enter your current password" required>
+            </div>
+            <div class="pf">
+              <label>New Password</label>
+              <input type="password" id="new-pw" name="newPassword"
+                     placeholder="At least 6 characters" required>
+            </div>
+            <div class="pf">
+              <label>Confirm New Password</label>
+              <input type="password" id="con-pw" name="confirmPassword"
+                     placeholder="Repeat new password" required>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button type="submit" class="btn-primary">Update Password</button>
+          </div>
         </form>
       </div>
     </div>
@@ -343,10 +376,13 @@
     return true;
   }
 
-  function validateProfile() {
-    var np = document.getElementById('np').value;
-    var cp = document.getElementById('cp').value;
-    if (np && np !== cp) { alert('Passwords do not match.'); return false; }
+  function validateResetPassword() {
+    var cur = document.getElementById('cur-pw').value.trim();
+    var np  = document.getElementById('new-pw').value;
+    var cp  = document.getElementById('con-pw').value;
+    if (!cur) { alert('Please enter your current password.'); return false; }
+    if (np.length < 6) { alert('New password must be at least 6 characters.'); return false; }
+    if (np !== cp) { alert('New passwords do not match.'); return false; }
     return true;
   }
 
